@@ -1,0 +1,43 @@
+# Backend
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/__pycache__/
+backend/**/*.py[cod]
+backend/.venv/
+backend/venv/
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/.coverage
+backend/htmlcov/
+backend/*.db
+backend/*.sqlite3
+backend/media/
+backend/uploads/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/.next/
+frontend/coverage/
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# General environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and OS files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
