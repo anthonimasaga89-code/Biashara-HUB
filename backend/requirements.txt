@@ -6,4 +6,6 @@ alembic
 pydantic-settings
 python-multipart
 pwdlib
-
+python-jose
+pydantic[email]
+pwdlib[argon2]
