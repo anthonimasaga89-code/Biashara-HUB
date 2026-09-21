@@ -29,10 +29,17 @@ const NAV = [
 
 export default function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [lang, setLang] = useState(() => localStorage.getItem('bh_lang') || 'en')
   const navigate = useNavigate()
+
+  const toggleLang = (next) => {
+    setLang(next)
+    localStorage.setItem('bh_lang', next)
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50">
+      {/* Mobile overlay */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"
@@ -40,6 +47,7 @@ export default function DashboardLayout() {
         />
       )}
 
+      {/* Sidebar */}
       <aside
         className={`
           fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-slate-900 text-white
@@ -107,7 +115,9 @@ export default function DashboardLayout() {
         </div>
       </aside>
 
+      {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* Top bar */}
         <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-slate-200/80 bg-white/80 px-4 backdrop-blur-md sm:px-6">
           <button
             className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
@@ -128,15 +138,54 @@ export default function DashboardLayout() {
             </kbd>
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
-            <button className="relative rounded-full p-2 text-slate-500 hover:bg-slate-100">
+          <div className="ml-auto flex items-center gap-2 sm:gap-2.5">
+            {/* Language switcher — modern segmented control */}
+            <div
+              role="group"
+              aria-label="Language"
+              className="relative flex items-center rounded-full border border-slate-200/90 bg-slate-100/80 p-0.5 shadow-sm backdrop-blur-sm"
+            >
+              <button
+                type="button"
+                onClick={() => toggleLang('en')}
+                aria-pressed={lang === 'en'}
+                className={`relative z-10 min-w-[2.25rem] rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wide transition-all duration-200 ${
+                  lang === 'en'
+                    ? 'bg-white text-violet-700 shadow-sm ring-1 ring-slate-200/80'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => toggleLang('sw')}
+                aria-pressed={lang === 'sw'}
+                className={`relative z-10 min-w-[2.25rem] rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wide transition-all duration-200 ${
+                  lang === 'sw'
+                    ? 'bg-white text-violet-700 shadow-sm ring-1 ring-slate-200/80'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                SW
+              </button>
+            </div>
+
+            <button
+              type="button"
+              className="relative rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+              aria-label="Notifications"
+            >
               <BellIcon />
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white" />
             </button>
+
             <div className="hidden h-8 w-8 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700 sm:flex">
               AM
             </div>
+
             <button
+              type="button"
               onClick={() => navigate('/products/new')}
               className="btn-action flex items-center gap-1.5 rounded-xl bg-violet-600 px-3.5 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-600/25 hover:bg-violet-700"
             >
