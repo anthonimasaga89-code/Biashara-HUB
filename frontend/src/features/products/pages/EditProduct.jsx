@@ -102,8 +102,12 @@ export default function EditProduct() {
   }
 
   const field =
-    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20'
-  const label = 'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500'
+    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-violet-500'
+  const label =
+    'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400'
+  const card =
+    'rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card dark:border-slate-700 dark:bg-slate-900'
+  const title = 'font-display text-sm font-semibold text-slate-800 dark:text-slate-100'
 
   if (loading) {
     return (
@@ -118,8 +122,10 @@ export default function EditProduct() {
   if (!form) {
     return (
       <div className="mx-auto max-w-lg p-8 text-center">
-        <h2 className="font-display text-lg font-semibold text-slate-800">Product not found</h2>
-        <p className="mt-1 text-sm text-slate-500">{error}</p>
+        <h2 className="font-display text-lg font-semibold text-slate-800 dark:text-slate-100">
+          Product not found
+        </h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{error}</p>
         <Link to="/products" className="mt-4 inline-block text-sm font-semibold text-violet-600">
           ← Back to catalog
         </Link>
@@ -132,30 +138,37 @@ export default function EditProduct() {
       <div className="flex items-center gap-3">
         <Link
           to={`/products/${id}`}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:bg-slate-50"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800"
         >
           <ArrowLeftIcon className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="font-display text-xl font-bold text-slate-900">Edit Product</h1>
-          <p className="text-sm text-slate-500 font-mono">{form.sku}</p>
+          <h1 className="font-display text-xl font-bold text-slate-900 dark:text-white">
+            Edit Product
+          </h1>
+          <p className="font-mono text-sm text-slate-500 dark:text-slate-400">{form.sku}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card">
-          <h2 className="font-display text-sm font-semibold text-slate-800">Media</h2>
+        <section className={card}>
+          <h2 className={title}>Media</h2>
           <div className="mt-4">
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-8 transition hover:border-violet-300 hover:bg-violet-50/30">
-              <UploadIcon className="h-7 w-7 text-slate-400" />
-              <span className="mt-2 text-sm font-medium text-slate-600">Add more media</span>
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-6 py-8 transition hover:border-violet-300 hover:bg-violet-50/30 dark:border-slate-600 dark:bg-slate-800/50 dark:hover:border-violet-500/50 dark:hover:bg-violet-500/5">
+              <UploadIcon className="h-7 w-7 text-slate-400 dark:text-slate-500" />
+              <span className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                Add more media
+              </span>
               <input type="file" accept="image/*,video/*" multiple className="hidden" onChange={onFiles} />
             </label>
           </div>
           {previews.length > 0 && (
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {previews.map((p, i) => (
-                <div key={p.url + i} className="group relative aspect-square overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200">
+                <div
+                  key={p.url + i}
+                  className="group relative aspect-square overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200 dark:bg-slate-800 dark:ring-slate-700"
+                >
                   <img src={p.url} alt={p.name} className="h-full w-full object-cover" />
                   <button
                     type="button"
@@ -170,19 +183,22 @@ export default function EditProduct() {
           )}
           {(uploading || progress > 0) && (
             <div className="mt-4">
-              <div className="mb-1 flex justify-between text-xs text-slate-500">
+              <div className="mb-1 flex justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>Uploading…</span>
                 <span className="font-mono tabular-nums">{progress}%</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                <div className="h-full rounded-full bg-violet-600 transition-all" style={{ width: `${progress}%` }} />
+              <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-violet-600 transition-all"
+                  style={{ width: `${progress}%` }}
+                />
               </div>
             </div>
           )}
         </section>
 
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card">
-          <h2 className="font-display text-sm font-semibold text-slate-800">Product details</h2>
+        <section className={card}>
+          <h2 className={title}>Product details</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
               <label className={label}>Product name *</label>
@@ -202,21 +218,38 @@ export default function EditProduct() {
             </div>
             <div className="sm:col-span-2">
               <label className={label}>Description</label>
-              <textarea className={`${field} min-h-[100px] resize-y`} value={form.description} onChange={set('description')} />
+              <textarea
+                className={`${field} min-h-[100px] resize-y`}
+                value={form.description}
+                onChange={set('description')}
+              />
             </div>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card">
-          <h2 className="font-display text-sm font-semibold text-slate-800">Pricing & inventory</h2>
+        <section className={card}>
+          <h2 className={title}>Pricing & inventory</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
               <label className={label}>Price (TZS) *</label>
-              <input type="number" min="0" className={field} value={form.price} onChange={set('price')} required />
+              <input
+                type="number"
+                min="0"
+                className={field}
+                value={form.price}
+                onChange={set('price')}
+                required
+              />
             </div>
             <div>
               <label className={label}>Stock quantity</label>
-              <input type="number" min="0" className={field} value={form.stock} onChange={set('stock')} />
+              <input
+                type="number"
+                min="0"
+                className={field}
+                value={form.stock}
+                onChange={set('stock')}
+              />
             </div>
             <div>
               <label className={label}>Category</label>
@@ -237,8 +270,8 @@ export default function EditProduct() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card">
-          <h2 className="font-display text-sm font-semibold text-slate-800">Contact & delivery</h2>
+        <section className={card}>
+          <h2 className={title}>Contact & delivery</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
               <label className={label}>Contact phone</label>
@@ -246,13 +279,17 @@ export default function EditProduct() {
             </div>
             <div className="sm:col-span-2">
               <label className={label}>Delivery information</label>
-              <textarea className={`${field} min-h-[80px] resize-y`} value={form.deliveryInfo} onChange={set('deliveryInfo')} />
+              <textarea
+                className={`${field} min-h-[80px] resize-y`}
+                value={form.deliveryInfo}
+                onChange={set('deliveryInfo')}
+              />
             </div>
           </div>
         </section>
 
         {error && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
             {error}
           </div>
         )}
@@ -260,7 +297,7 @@ export default function EditProduct() {
         <div className="flex flex-wrap items-center justify-end gap-3 pb-8">
           <Link
             to={`/products/${id}`}
-            className="btn-action rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+            className="btn-action rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancel
           </Link>

@@ -143,6 +143,23 @@ export function LightbulbIcon({ className = 'w-4 h-4' }) {
   )
 }
 
+export function SunIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <circle cx="12" cy="12" r="4.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2.75v2.5M12 18.75v2.5M21.25 12h-2.5M5.25 12h-2.5M18.364 5.636l-1.768 1.768M7.404 16.596l-1.768 1.768M18.364 18.364l-1.768-1.768M7.404 7.404L5.636 5.636" />
+    </svg>
+  )
+}
+
+export function MoonIcon({ className = 'w-4 h-4' }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 0111.21 3a9 9 0 109.79 9.79z" />
+    </svg>
+  )
+}
+
 export function MenuIcon({ className = 'w-5 h-5' }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

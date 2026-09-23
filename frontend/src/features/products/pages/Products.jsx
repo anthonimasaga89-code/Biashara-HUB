@@ -5,7 +5,6 @@ import {
   deleteProduct,
   formatTZS,
   CATEGORIES,
-  LOCATIONS,
 } from '../services/productService'
 import {
   PackageIcon,
@@ -18,83 +17,38 @@ import {
   PencilIcon,
   EyeIcon,
   TrashIcon,
-  FilterIcon,
   PlusIcon,
   SearchIcon,
   XIcon,
 } from '../components/Icons'
-
-function StockBadge({ status, stock }) {
-  if (status === 'out_of_stock' || stock === 0) {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700 ring-1 ring-inset ring-rose-200">
-        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
-        Out of Stock
-      </span>
-    )
-  }
-  if (status === 'low_stock' || stock <= 10) {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-200">
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-        {stock} Low
-      </span>
-    )
-  }
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200">
-      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-      {stock} In Stock
-    </span>
-  )
-}
-
-function StatusPill({ status }) {
-  const map = {
-    active: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-    draft: 'bg-slate-100 text-slate-600 ring-slate-200',
-    archived: 'bg-slate-50 text-slate-500 ring-slate-200',
-  }
-  return (
-    <span
-      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium capitalize ring-1 ring-inset ${map[status] || map.draft}`}
-    >
-      {status}
-    </span>
-  )
-}
-
-function CategoryTag({ category }) {
-  return (
-    <span className="inline-flex rounded-lg bg-violet-50 px-2 py-1 text-xs font-medium text-violet-700 ring-1 ring-inset ring-violet-100">
-      {category}
-    </span>
-  )
-}
 
 function DeleteModal({ product, onClose, onConfirm, loading }) {
   if (!product) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl fade-in">
+      <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl fade-in dark:bg-slate-900 dark:ring-1 dark:ring-slate-700">
         <div className="mb-5 flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 dark:bg-rose-500/10">
             <TrashIcon className="h-5 w-5 text-rose-500" />
           </div>
           <div>
-            <h3 className="font-display text-lg font-semibold text-slate-900">Delete Product</h3>
-            <p className="mt-1 text-sm text-slate-500">
+            <h3 className="font-display text-lg font-semibold text-slate-900 dark:text-slate-100">
+              Delete Product
+            </h3>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Are you sure you want to delete{' '}
-              <span className="font-medium text-slate-800">&quot;{product.name}&quot;</span>? This
-              action cannot be undone.
+              <span className="font-medium text-slate-800 dark:text-slate-200">
+                &quot;{product.name}&quot;
+              </span>
+              ? This action cannot be undone.
             </p>
           </div>
         </div>
-        <div className="mb-5 flex items-start gap-2 rounded-xl border border-rose-100 bg-rose-50 p-3">
+        <div className="mb-5 flex items-start gap-2 rounded-xl border border-rose-100 bg-rose-50 p-3 dark:border-rose-500/20 dark:bg-rose-500/10">
           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-500" />
-          <p className="text-xs text-rose-600">
-            This will permanently remove the product, all its variants, and associated media files.
+          <p className="text-xs text-rose-600 dark:text-rose-400">
+            This will permanently remove the product and associated media files.
           </p>
         </div>
         <div className="flex gap-3">
@@ -102,7 +56,7 @@ function DeleteModal({ product, onClose, onConfirm, loading }) {
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="btn-action flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+            className="btn-action flex-1 rounded-xl border border-slate-200 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             Cancel
           </button>
@@ -123,16 +77,14 @@ function DeleteModal({ product, onClose, onConfirm, loading }) {
 function Toast({ message, type = 'success', onClose }) {
   if (!message) return null
   const colors =
-    type === 'error'
-      ? 'bg-rose-600'
-      : type === 'info'
-        ? 'bg-violet-600'
-        : 'bg-emerald-600'
+    type === 'error' ? 'bg-rose-600' : type === 'info' ? 'bg-violet-600' : 'bg-emerald-600'
   return (
     <div className="fixed bottom-6 right-6 z-[60] fade-in">
-      <div className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white shadow-xl ${colors}`}>
+      <div
+        className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white shadow-xl ${colors}`}
+      >
         <span>{message}</span>
-        <button onClick={onClose} className="rounded-lg p-0.5 hover:bg-white/20">
+        <button type="button" onClick={onClose} className="rounded-lg p-0.5 hover:bg-white/20">
           <XIcon className="h-4 w-4" />
         </button>
       </div>
@@ -140,20 +92,150 @@ function Toast({ message, type = 'success', onClose }) {
   )
 }
 
-function SkeletonRows() {
+function StatusBadge({ status }) {
+  const styles = {
+    active: 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/30',
+    draft: 'bg-slate-500 text-white',
+    archived: 'bg-slate-400 text-white',
+  }
   return (
-    <div className="space-y-0 divide-y divide-slate-100">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 px-4 py-4">
-          <div className="skeleton h-11 w-11 shrink-0 rounded-lg" />
-          <div className="flex-1 space-y-2">
-            <div className="skeleton h-3.5 w-40" />
-            <div className="skeleton h-3 w-24" />
+    <span
+      className={`absolute right-1.5 top-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-semibold capitalize ${styles[status] || styles.draft}`}
+    >
+      {status}
+    </span>
+  )
+}
+
+function ProductCard({ product, onDelete, onAi }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-slate-200/80 bg-white shadow-sm transition hover:border-violet-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-violet-500/30">
+      {/* Compact image */}
+      <div className="relative h-28 overflow-hidden bg-slate-100 sm:h-32 dark:bg-slate-800">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
+          loading="lazy"
+        />
+        <StatusBadge status={product.status} />
+      </div>
+
+      <div className="flex flex-1 flex-col gap-1.5 p-2.5">
+        <h3 className="font-display text-[13px] font-semibold leading-snug text-slate-900 line-clamp-1 dark:text-slate-100">
+          {product.name}
+        </h3>
+        <p className="line-clamp-1 text-[11px] leading-snug text-slate-500 dark:text-slate-400">
+          {product.description || `${product.category} · ${product.location}`}
+        </p>
+
+        <div className="mt-auto flex items-center justify-between gap-1.5 pt-0.5">
+          <div className="font-display text-[13px] font-bold tabular-nums text-slate-900 dark:text-white">
+            {formatTZS(product.price)}
           </div>
-          <div className="skeleton hidden h-6 w-20 rounded-lg sm:block" />
-          <div className="skeleton h-4 w-24" />
-          <div className="skeleton h-6 w-20 rounded-full" />
-          <div className="skeleton h-6 w-16 rounded-full" />
+          <span
+            className={`text-[10px] font-medium ${
+              product.stock === 0
+                ? 'text-rose-600'
+                : product.stock <= 10
+                  ? 'text-amber-600'
+                  : 'text-slate-500 dark:text-slate-400'
+            }`}
+          >
+            {product.stock === 0 ? 'Out of stock' : `Stock: ${product.stock}`}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5 pt-0.5">
+          <Link
+            to={`/products/${product.id}`}
+            className="btn-action flex flex-1 items-center justify-center rounded-lg bg-slate-900 py-1.5 text-[11px] font-semibold text-white transition hover:bg-slate-800 dark:bg-violet-600 dark:hover:bg-violet-500"
+          >
+            View
+          </Link>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-800 dark:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+              aria-label="More actions"
+            >
+              <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="6" r="1.5" />
+                <circle cx="12" cy="12" r="1.5" />
+                <circle cx="12" cy="18" r="1.5" />
+              </svg>
+            </button>
+
+            {menuOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+                <div className="absolute bottom-full right-0 z-20 mb-1 w-40 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-elevated dark:border-slate-700 dark:bg-slate-800">
+                  <Link
+                    to={`/products/${product.id}`}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <EyeIcon className="h-4 w-4" /> View
+                  </Link>
+                  <Link
+                    to={`/products/${product.id}/edit`}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <PencilIcon className="h-4 w-4" /> Edit
+                  </Link>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-violet-600 hover:bg-violet-50 dark:text-violet-400 dark:hover:bg-violet-500/10"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onAi?.(product)
+                    }}
+                  >
+                    <SparkleIcon className="h-4 w-4" /> AI insight
+                  </button>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onDelete?.(product)
+                    }}
+                  >
+                    <TrashIcon className="h-4 w-4" /> Delete
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function SkeletonCards() {
+  return (
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <div
+          key={i}
+          className="overflow-hidden rounded-xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900"
+        >
+          <div className="skeleton h-28 w-full rounded-none sm:h-32" />
+          <div className="space-y-1.5 p-2.5">
+            <div className="skeleton h-3 w-3/4" />
+            <div className="skeleton h-2.5 w-full" />
+            <div className="flex justify-between pt-0.5">
+              <div className="skeleton h-3 w-16" />
+              <div className="skeleton h-2.5 w-10" />
+            </div>
+            <div className="skeleton h-7 w-full rounded-lg" />
+          </div>
         </div>
       ))}
     </div>
@@ -166,9 +248,8 @@ export default function Products() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
-  const [activeTab, setActiveTab] = useState('all')
   const [category, setCategory] = useState('All Categories')
-  const [location, setLocation] = useState('All Locations')
+  const [status, setStatus] = useState('All Status')
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
   const [toast, setToast] = useState(null)
@@ -198,23 +279,28 @@ export default function Products() {
 
   const filtered = useMemo(() => {
     return products.filter((p) => {
-      if (activeTab !== 'all' && p.status !== activeTab) return false
+      if (status !== 'All Status' && p.status !== status.toLowerCase()) return false
       if (category !== 'All Categories' && p.category !== category) return false
-      if (location !== 'All Locations' && p.location !== location) return false
       if (search) {
         const q = search.toLowerCase()
-        if (!p.name.toLowerCase().includes(q) && !p.sku.toLowerCase().includes(q)) return false
+        if (
+          !p.name.toLowerCase().includes(q) &&
+          !p.sku.toLowerCase().includes(q) &&
+          !(p.description || '').toLowerCase().includes(q)
+        )
+          return false
       }
       return true
     })
-  }, [products, activeTab, category, location, search])
+  }, [products, category, status, search])
 
   const counts = useMemo(
     () => ({
       all: products.length,
       active: products.filter((p) => p.status === 'active').length,
-      draft: products.filter((p) => p.status === 'draft').length,
-      archived: products.filter((p) => p.status === 'archived').length,
+      lowStock: products.filter(
+        (p) => p.stockStatus === 'low_stock' || (p.stock > 0 && p.stock <= 10)
+      ).length,
     }),
     [products]
   )
@@ -238,7 +324,7 @@ export default function Products() {
     },
     {
       label: 'LOW STOCK ALERTS',
-      value: products.filter((p) => p.stockStatus === 'low_stock' || (p.stock > 0 && p.stock <= 10)).length,
+      value: counts.lowStock,
       trend: '+2',
       sub: 'Need reorder',
       icon: AlertIcon,
@@ -270,21 +356,15 @@ export default function Products() {
     }
   }
 
-  const tabs = [
-    { key: 'all', label: 'All Products', count: counts.all },
-    { key: 'active', label: 'Active', count: counts.active },
-    { key: 'draft', label: 'Drafts', count: counts.draft },
-    { key: 'archived', label: 'Archived', count: counts.archived },
-  ]
-
   return (
     <div className="mx-auto max-w-[1400px] space-y-6 p-4 sm:p-6">
+      {/* Page header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Product Catalog
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Manage and track all your Biashara HUB inventory
           </p>
         </div>
@@ -297,13 +377,14 @@ export default function Products() {
         </div>
       </div>
 
+      {/* KPI cards */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {kpis.map((k) => {
           const Icon = k.icon
           return (
             <div
               key={k.label}
-              className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-card transition hover:shadow-elevated"
+              className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-card transition hover:shadow-elevated dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex items-start justify-between">
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
@@ -311,17 +392,25 @@ export default function Products() {
                 </span>
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-xl ${
-                    k.warn ? 'bg-amber-50 text-amber-600' : 'bg-violet-50 text-violet-600'
+                    k.warn
+                      ? 'bg-amber-50 text-amber-600 dark:bg-amber-500/10'
+                      : 'bg-violet-50 text-violet-600 dark:bg-violet-500/10'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
                 </div>
               </div>
-              <div className="mt-2 font-display text-2xl font-bold tabular-nums text-slate-900">
+              <div className="mt-2 font-display text-2xl font-bold tabular-nums text-slate-900 dark:text-white">
                 {k.value}
               </div>
               <div className="mt-1.5 flex items-center gap-1.5 text-xs">
-                <span className={k.trendUp ? 'font-semibold text-emerald-600' : 'font-semibold text-amber-600'}>
+                <span
+                  className={
+                    k.trendUp
+                      ? 'font-semibold text-emerald-600'
+                      : 'font-semibold text-amber-600'
+                  }
+                >
                   {k.trendUp ? '↗' : '↘'} {k.trend}
                 </span>
                 <span className="text-slate-400">{k.sub}</span>
@@ -331,25 +420,30 @@ export default function Products() {
         })}
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-violet-100 bg-gradient-to-br from-violet-50/80 to-white shadow-card">
-        <div className="flex items-center gap-2 border-b border-violet-100/80 px-5 py-3">
+      {/* AI Insights */}
+      <div className="overflow-hidden rounded-2xl border border-violet-100 bg-gradient-to-br from-violet-50/80 to-white shadow-card dark:border-violet-500/20 dark:from-violet-500/10 dark:to-slate-900">
+        <div className="flex items-center gap-2 border-b border-violet-100/80 px-5 py-3 dark:border-violet-500/20">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-600 text-white">
             <SparkleIcon className="h-3.5 w-3.5" />
           </div>
-          <span className="font-display text-sm font-semibold text-slate-800">AI Insights</span>
+          <span className="font-display text-sm font-semibold text-slate-800 dark:text-slate-100">
+            AI Insights
+          </span>
           <span className="rounded-full bg-violet-600 px-2 py-0.5 text-[10px] font-bold text-white">
             3 new
           </span>
         </div>
         <div className="space-y-3 p-4 sm:p-5">
-          <div className="rounded-xl border border-violet-100 bg-violet-50/50 p-4">
+          <div className="rounded-xl border border-violet-100 bg-violet-50/50 p-4 dark:border-violet-500/20 dark:bg-violet-500/5">
             <div className="flex items-start gap-3">
               <RocketIcon className="mt-0.5 h-4 w-4 shrink-0 text-violet-600" />
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-slate-800">Boost Zanzibar Spice Set</div>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                  This product has 3× higher engagement on Instagram Stories vs. static posts. Schedule
-                  a Reels campaign this Friday for peak reach.
+                <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  Boost Zanzibar Spice Set
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  This product has 3× higher engagement on Instagram Stories vs. static posts.
+                  Schedule a Reels campaign this Friday for peak reach.
                 </p>
                 <button
                   type="button"
@@ -362,14 +456,16 @@ export default function Products() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-amber-100 bg-amber-50/50 p-4">
+          <div className="rounded-xl border border-amber-100 bg-amber-50/50 p-4 dark:border-amber-500/20 dark:bg-amber-500/5">
             <div className="flex items-start gap-3">
               <AlertIcon className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-slate-800">Restock Alert: Maasai Sandals</div>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                  At current sell-through rate, you will stock out in ~4 days. Supplier lead time is 7
-                  days — order today to avoid lost revenue.
+                <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  Restock Alert: Maasai Sandals
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  At current sell-through rate, you will stock out in ~4 days. Supplier lead time is
+                  7 days — order today to avoid lost revenue.
                 </p>
                 <button
                   type="button"
@@ -382,12 +478,14 @@ export default function Products() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4">
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/5">
             <div className="flex items-start gap-3">
               <LightbulbIcon className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
               <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-slate-800">Bundle Opportunity Detected</div>
-                <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                <div className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                  Bundle Opportunity Detected
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                   Customers who buy Kitenge Dress also view Kanga Fabric 68% of the time. Create a
                   &quot;Style Bundle&quot; to increase AOV by est. +TZS 12,000.
                 </p>
@@ -404,243 +502,104 @@ export default function Products() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-card">
-        <div className="flex flex-wrap items-center gap-1 border-b border-slate-100 px-4 pt-3">
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => setActiveTab(t.key)}
-              className={`relative px-3 py-2.5 text-sm font-medium transition ${
-                activeTab === t.key ? 'text-violet-700' : 'text-slate-500 hover:text-slate-800'
-              }`}
-            >
-              {t.label}
-              <span
-                className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] tabular-nums ${
-                  activeTab === t.key
-                    ? 'bg-violet-100 text-violet-700'
-                    : 'bg-slate-100 text-slate-500'
-                }`}
-              >
-                {t.count}
-              </span>
-              {activeTab === t.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-violet-600" />
-              )}
-            </button>
+      {/* Search + filters */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative min-w-0 flex-1">
+          <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search products..."
+            className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-violet-500"
+          />
+        </div>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        >
+          <option>All Categories</option>
+          {CATEGORIES.map((c) => (
+            <option key={c}>{c}</option>
           ))}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-4 py-3">
-          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
-            <FilterIcon className="h-3.5 w-3.5" />
-            Filter:
-          </div>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20"
-          >
-            <option>All Categories</option>
-            {CATEGORIES.map((c) => (
-              <option key={c}>{c}</option>
-            ))}
-          </select>
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20"
-          >
-            <option>All Locations</option>
-            {LOCATIONS.map((l) => (
-              <option key={l}>{l}</option>
-            ))}
-          </select>
-          <div className="relative ml-auto w-full sm:w-56">
-            <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search name or SKU…"
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-xs outline-none focus:border-violet-400 focus:bg-white focus:ring-2 focus:ring-violet-500/20"
-            />
-          </div>
-          <span className="text-xs text-slate-400 tabular-nums">{filtered.length} results</span>
-        </div>
-
-        {loading && <SkeletonRows />}
-
-        {!loading && error && (
-          <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50">
-              <AlertIcon className="h-6 w-6 text-rose-500" />
-            </div>
-            <h3 className="font-display text-base font-semibold text-slate-800">Something went wrong</h3>
-            <p className="mt-1 max-w-sm text-sm text-slate-500">{error}</p>
-            <button
-              type="button"
-              onClick={load}
-              className="btn-action mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700"
-            >
-              Retry
-            </button>
-          </div>
-        )}
-
-        {!loading && !error && filtered.length === 0 && (
-          <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-            <div className="relative mb-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
-                <PackageIcon className="h-8 w-8 text-slate-400" />
-              </div>
-            </div>
-            <h3 className="font-display text-lg font-semibold text-slate-800">No products found</h3>
-            <p className="mt-1 max-w-xs text-sm text-slate-400">
-              {search
-                ? `No results for "${search}". Try a different search term.`
-                : 'This filter has no products yet. Start by adding your first product.'}
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/products/new')}
-              className="btn-action mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/25 hover:bg-violet-700"
-            >
-              <PlusIcon className="h-4 w-4" />
-              Add First Product
-            </button>
-          </div>
-        )}
-
-        {!loading && !error && filtered.length > 0 && (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left">
-              <thead>
-                <tr className="border-b border-slate-100 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                  <th className="px-4 py-3 font-semibold">Product</th>
-                  <th className="px-3 py-3 font-semibold">SKU</th>
-                  <th className="px-3 py-3 font-semibold">Category</th>
-                  <th className="px-3 py-3 font-semibold">Price</th>
-                  <th className="px-3 py-3 font-semibold">Stock</th>
-                  <th className="px-3 py-3 font-semibold">Status</th>
-                  <th className="px-3 py-3 text-right font-semibold">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {filtered.map((p) => (
-                  <tr key={p.id} className="product-row group">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div className="img-zoom-wrap h-11 w-11 shrink-0 rounded-lg bg-slate-100 ring-1 ring-slate-200/80">
-                          <img
-                            src={p.image}
-                            alt={p.name}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="min-w-0">
-                          <Link
-                            to={`/products/${p.id}`}
-                            className="block truncate text-sm font-semibold text-slate-800 hover:text-violet-700"
-                          >
-                            {p.name}
-                          </Link>
-                          <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-400">
-                            <span className="h-1 w-1 rounded-full bg-slate-300" />
-                            {p.location} · {p.lastUpdated}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <code className="rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-slate-600">
-                        {p.sku}
-                      </code>
-                    </td>
-                    <td className="px-3 py-3">
-                      <CategoryTag category={p.category} />
-                    </td>
-                    <td className="px-3 py-3 text-sm font-semibold tabular-nums text-slate-800">
-                      {formatTZS(p.price)}
-                    </td>
-                    <td className="px-3 py-3">
-                      <StockBadge status={p.stockStatus} stock={p.stock} />
-                    </td>
-                    <td className="px-3 py-3">
-                      <StatusPill status={p.status} />
-                    </td>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center justify-end gap-1 opacity-80 transition group-hover:opacity-100">
-                        <Link
-                          to={`/products/${p.id}/edit`}
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                          title="Edit"
-                        >
-                          <PencilIcon className="h-4 w-4" />
-                        </Link>
-                        <Link
-                          to={`/products/${p.id}`}
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                          title="View"
-                        >
-                          <EyeIcon className="h-4 w-4" />
-                        </Link>
-                        <button
-                          type="button"
-                          className="rounded-lg p-1.5 text-violet-500 hover:bg-violet-50"
-                          title="AI insights"
-                          onClick={() =>
-                            setToast({ message: `AI insight for ${p.name}`, type: 'info' })
-                          }
-                        >
-                          <SparkleIcon className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                          title="Delete"
-                          onClick={() => setDeleteTarget(p)}
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {!loading && !error && filtered.length > 0 && (
-          <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-400">
-            <span>
-              Showing {filtered.length} of {products.length} products
-            </span>
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600 text-xs font-semibold text-white"
-              >
-                1
-              </button>
-              <button
-                type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium text-slate-500 hover:bg-slate-100"
-              >
-                2
-              </button>
-              <button
-                type="button"
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium text-slate-500 hover:bg-slate-100"
-              >
-                3
-              </button>
-            </div>
-          </div>
-        )}
+        </select>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+        >
+          <option>All Status</option>
+          <option>Active</option>
+          <option>Draft</option>
+          <option>Archived</option>
+        </select>
       </div>
+
+      {/* Product cards grid */}
+      {loading && <SkeletonCards />}
+
+      {!loading && error && (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center dark:border-slate-800 dark:bg-slate-900">
+          <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 dark:bg-rose-500/10">
+            <AlertIcon className="h-6 w-6 text-rose-500" />
+          </div>
+          <h3 className="font-display text-base font-semibold text-slate-800 dark:text-slate-100">
+            Something went wrong
+          </h3>
+          <p className="mt-1 max-w-sm text-sm text-slate-500">{error}</p>
+          <button
+            type="button"
+            onClick={load}
+            className="btn-action mt-4 rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && filtered.length === 0 && (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800">
+            <PackageIcon className="h-8 w-8 text-slate-400" />
+          </div>
+          <h3 className="font-display text-lg font-semibold text-slate-800 dark:text-slate-100">
+            No products found
+          </h3>
+          <p className="mt-1 max-w-xs text-sm text-slate-400">
+            {search
+              ? `No results for "${search}". Try a different search.`
+              : 'Start by adding your first product to the catalog.'}
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate('/products/new')}
+            className="btn-action mt-5 flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-600/25 hover:bg-violet-700"
+          >
+            <PlusIcon className="h-4 w-4" />
+            Add First Product
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && filtered.length > 0 && (
+        <>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {filtered.map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                onDelete={setDeleteTarget}
+                onAi={(prod) =>
+                  setToast({ message: `AI insight for ${prod.name}`, type: 'info' })
+                }
+              />
+            ))}
+          </div>
+          <p className="text-center text-xs text-slate-400">
+            Showing {filtered.length} of {products.length} products
+          </p>
+        </>
+      )}
 
       <DeleteModal
         product={deleteTarget}
@@ -648,11 +607,7 @@ export default function Products() {
         onConfirm={handleDelete}
         loading={deleting}
       />
-      <Toast
-        message={toast?.message}
-        type={toast?.type}
-        onClose={() => setToast(null)}
-      />
+      <Toast message={toast?.message} type={toast?.type} onClose={() => setToast(null)} />
     </div>
   )
 }
