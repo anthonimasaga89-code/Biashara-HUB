@@ -4,7 +4,7 @@ from app.models.user import User
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.schema.business import BusinessCreate, BusinessResponse, BusinessUpdate
-from app.servises.business_service import (
+from app.services.business_service import (
     Create_business,
     delete_business as delete_business_service,
     get_business as get_business_service,

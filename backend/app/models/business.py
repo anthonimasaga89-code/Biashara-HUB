@@ -22,3 +22,4 @@ class Business(Base):
 
     owner = relationship( "User", back_populates= "business" )
 
+    social=relationship("SocialAccount",back_populates="business")

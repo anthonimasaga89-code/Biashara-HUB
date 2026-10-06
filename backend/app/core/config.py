@@ -7,6 +7,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_TIME:int=30
     APP_NAME:str
     
+    REDIRECT_CLIENT_URL:str
+
+    CLIENT_ID :str
+    LINKEDIN_CLIENT_SECRET:str
+    
     model_config=SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
