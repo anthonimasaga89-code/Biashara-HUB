@@ -18,3 +18,4 @@ class User(Base):
     updatetd_at=Column(DateTime,default=datetime.now,onupdate=datetime.now)
 
     business=relationship("Business",back_populates="owner")
+    

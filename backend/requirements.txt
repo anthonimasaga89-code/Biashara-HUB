@@ -9,3 +9,4 @@ pwdlib
 python-jose
 pydantic[email]
 pwdlib[argon2]
+requests

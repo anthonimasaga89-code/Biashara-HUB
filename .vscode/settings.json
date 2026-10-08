@@ -1,0 +1,15 @@
+{
+  "workbench.preferredLightColorTheme": "🔆 Colorized Light 03 - Amber",
+  "workbench.preferredDarkColorTheme": "🌙 Colorized Dark 03 - Amber",
+  "workbench.colorTheme": "🌙 Colorized Dark 03 - Amber",
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#003200",
+    "titleBar.activeForeground": "#ffffff",
+    "titleBar.inactiveBackground": "#003200cc",
+    "titleBar.inactiveForeground": "#ffffff",
+    "statusBar.background": "#003200",
+    "statusBar.foreground": "#ffffff"
+  },
+  "colorizedManager.variantId": "amber",
+  "folder-color.pathColors": []
+}

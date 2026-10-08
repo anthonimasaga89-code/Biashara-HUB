@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Depends
-from app.servises.user_services import User_services
+from app.services.user_services import User_services
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordBearer
